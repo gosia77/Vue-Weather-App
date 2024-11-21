@@ -1,19 +1,19 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <div class="app">
   <WeatherCard/>
+</div>
 </template>
 
 <script>
 import WeatherCard from './components/WeatherCard.vue'
 
+
 export default {
   name: 'App',
   components: {
     WeatherCard
-  }
-}
-
-
+  },
+};
 </script>
 
 <style>
