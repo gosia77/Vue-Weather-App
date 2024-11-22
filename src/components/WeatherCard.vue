@@ -1,19 +1,18 @@
 <template>
   <div class="weather-container">
     <div class="weather-wrap">
-      <div class="search-box">
+      <class class="search-box">
         <!-- serch for the weather -->
         <SearchBox v-model="cityName" @search="fetchWeather" />
         <!-- search for the weather info and icon -->
         <WeatherInfo :weatherData="weatherData" :weather_icon="weather_icon" />
-        <!-- Echarts -->
-        <Echarts :options="chartOptions" />
+        <Echarts :options="temperatureChartOptions" />
+        <Echarts :options="humidityChartOptions" />
+        <Echarts :options="windChartOptions" />
+        </class>
     </div>
   </div>
-  </div>
 </template>
-
-
 
 <script>
 import axios from 'axios';
@@ -37,7 +36,9 @@ export default {
       cityName: "",
       // data from API
       weatherData: {},
-      chartOptions: null,
+      temperatureChartOptions: null,
+      humidityChartOptions: null,
+      windChartOptions: null,
     };
   },
   methods: {
@@ -47,12 +48,7 @@ export default {
           const response = await axios.get(`${this.url_base}weather?q=${this.cityName}&units=metric&appid=${this.api_key}`);
           this.setResults(response.data);
           
-          this.setChartOptions([
-            { name: "Morning", value: response.data.main.temp_min },
-            { name: "Day", value: response.data.main.temp },
-            { name: "Evening", value: response.data.main.temp_max },
-          ]);
-
+         this.updateChartsData(response.data);
         } catch (error) {
           console.error("Error fetching weather data:", error);
         }
@@ -62,27 +58,61 @@ export default {
       this.weatherData = returnedResponse;
       console.log("WeatherDat: ", returnedResponse);
     },
-    setChartOptions(data) {
-      this.chartOptions = {
-        title: {
-          text: "Weather Temperatures",
-          left: "center"
-        },
-        xAxis: {
-          type: "category",
-          data: data.map((item) => item.name), 
-        },
-        yAxis: {
-          type: "value",
-        },
+    updateChartsData(data) {
+      const chartData= [
+            { name: "In the morning", value: data.main.temp_min, humidity: data.main.humidity, wind: data.wind.speed },
+            { name: "During the day", value: data.main.temp, humidity: data.main.humidity, wind: data.wind.speed },
+            { name: "In the evening", value: data.main.temp_max, humidity: data.main.humidity, wind: data.wind.speed },
+          ];
+      this.setTemperatureChartOptions(chartData);
+      this.setHumidityChartOptions(chartData);
+      this.setWindChartOptions(chartData);
+    },
+    setTemperatureChartOptions(data) {
+      this.temperatureChartOptions = {
+        title: { text: "Temperature (°C)", left: "center" },
+        xAxis: { type: "category", data: data.map((item) => item.name) },
+        yAxis: { type: "value", name: "°C" },
         series: [
           {
-            type: "bar",
+            name: "Temperature",
+            type: "line",
             data: data.map((item) => item.value),
+            itemStyle: { color: "#1e90ff" },
+          }
+        ],
+      };
+    },
+    setHumidityChartOptions(data) {
+      this.humidityChartOptions = {
+        title: { text: "Humidity (%)", left: "center" },
+        xAxis: { type: "category", data: data.map((item) => item.name) },
+        yAxis: { type: "value", name: "%" },
+        series: [
+          {
+            name: "Humidity",
+            type: "bar",
+            data: data.map((item) => item.humidity),
+            itemStyle: { color: "#1e90ff" },
           },
         ],
-      }
-    }
-  },
+      };
+    },
+    setWindChartOptions(data) {
+      this.windChartOptions = {
+        title: { text: "Wind (m/s)", left: "center" },
+        xAxis: { type: "category", data: data.map((item) => item.name) },
+        yAxis: { type: "value", name: "m/s" },
+        series: [
+          {
+            name: "Wind Speed",
+            type: "line",
+            data: data.map((item) => item.wind),
+            itemStyle: { color: "#ff6347"  },
+          },
+        ],
+      };
+    },
+  }
 };
 </script>
