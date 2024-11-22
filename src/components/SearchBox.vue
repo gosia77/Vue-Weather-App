@@ -20,7 +20,7 @@ export default {
     },
     watch: {
         cityName(newCity) {
-            this.$emit('update:modelValue', newCity);
+            this.$emit("update:modelValue", newCity);
         }
     },
     methods: {
