@@ -43,6 +43,7 @@
 <style scoped>
   .echarts {
     margin-top: 30px;
+    color: white;
   }
 
 

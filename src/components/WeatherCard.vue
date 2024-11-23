@@ -70,7 +70,7 @@ export default {
     },
     setTemperatureChartOptions(data) {
       this.temperatureChartOptions = {
-        title: { text: "Temperature (°C)", left: "center" },
+        title: { text: "Temperature (°C)", left: "center", textStyle: {color: "#fff"} },
         responsive: true,
         xAxis: { type: "category", data: data.map((item) => item.name) },
         yAxis: { type: "value", name: "°C" },
@@ -86,7 +86,7 @@ export default {
     },
     setHumidityChartOptions(data) {
       this.humidityChartOptions = {
-        title: { text: "Humidity (%)", left: "center" },
+        title: { text: "Humidity (%)", left: "center", textStyle: {color: "#fff"} },
         responsive: true,
         xAxis: { type: "category", data: data.map((item) => item.name) },
         yAxis: { type: "value", name: "%" },
@@ -102,7 +102,7 @@ export default {
     },
     setWindChartOptions(data) {
       this.windChartOptions = {
-        title: { text: "Wind (m/s)", left: "center" },
+        title: { text: "Wind (m/s)", left: "center", textStyle: {color: "#fff"}  },
         responsive: true,
         xAxis: { type: "category", data: data.map((item) => item.name) },
         yAxis: { type: "value", name: "m/s" },
@@ -122,7 +122,8 @@ export default {
 
 <style scoped>
   .weather-container {
-    max-width: 640px;
+    width: 100%;
+    margin: 0 auto;
     padding: 16px;
     box-sizing: border-box;
     color: white;
@@ -134,7 +135,14 @@ export default {
     border-radius: 15px;
     width: 100%;
     text-align: center;
-    background-color: #1F0343;
+    background-color: #24487e;
+  }
+
+  @media screen and (min-width: 640px) {
+    .weather-container {
+     max-width: 640px;
+     margin: 0 auto;
+    }
   }
 
  
