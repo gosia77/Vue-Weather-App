@@ -47,7 +47,7 @@ export default {
         try {
           const response = await axios.get(`${this.url_base}weather?q=${this.cityName}&units=metric&appid=${this.api_key}`);
           this.setResults(response.data);
-          
+          this.weather_icon = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`;
          this.updateChartsData(response.data);
         } catch (error) {
           console.error("Error fetching weather data:", error);
@@ -125,14 +125,16 @@ export default {
     max-width: 640px;
     padding: 16px;
     box-sizing: border-box;
+    color: white;
+    
   }
 
   .weather-wrap {
     max-width: 600px;
     border-radius: 15px;
-    padding: 30px;
     width: 100%;
     text-align: center;
+    background-color: #1F0343;
   }
 
  

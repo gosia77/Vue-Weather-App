@@ -1,13 +1,15 @@
 <template>
     <div class="weather-info" v-if="weatherData && weatherData.main">
         <div class="location-box">
-            <div class="location">{{ weatherData.name }},{{ weatherData.sys.country }}</div>
+            <div class="location">{{ weatherData.name }}, {{ weatherData.sys.country }}</div>
             <div class="date">{{ todayDate() }}</div>
         </div>
         <div class="weather-box">
             <p class="temp">{{ Math.round(weatherData.main.temp) }}°C</p>
             <p class="weather">{{ weatherData.weather[0].main }}</p>
-            <p class=""></p>
+            <div class="weather-icon">
+                <img :src="weather_icon" alt="Weather icon">
+            </div>
         </div>
     </div>
 </template>
@@ -17,12 +19,12 @@ export default {
     name: "WeatherInfo",
     props: {
         weatherData: Object,
-        wheater_icon: String,
+        weather_icon: String,
     },
     methods: {
         todayDate() {
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
         const currentDate = new Date();
         const day = days[currentDate.getDay()];
@@ -30,7 +32,7 @@ export default {
         const date = currentDate.getDate();
         const year = currentDate.getFullYear();
 
-        return `${day}, ${month}, ${date}, ${year}`;
+        return `${day}, ${date}.${month}.${year}`;
     }
     },
 };
@@ -41,6 +43,22 @@ export default {
         margin-top: 30px;
         margin-bottom: 30px;
     }
+
+    .location {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .date {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .temp {
+        font-size: 50px;
+    }
+
+
    
 
 

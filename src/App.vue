@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <h1>Weather</h1>
   <WeatherCard/>
 </div>
 </template>
@@ -18,8 +19,6 @@ export default {
 
 <style>
 #app {
-  max-width: 640px;
-  padding: 16px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

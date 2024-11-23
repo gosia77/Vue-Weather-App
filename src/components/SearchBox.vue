@@ -36,8 +36,10 @@ export default {
         font-display: flex;
         flex-direction: column;
         margin-bottom: 20px;
+        
     }
-     .search-box input {
+    .search-box input {
+    margin-top: 10px;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
