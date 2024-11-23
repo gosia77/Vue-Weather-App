@@ -1,5 +1,8 @@
 # vue-weather-app
 
+A simple weather application that fetches weather data from OpenWeather API and display it using Vue.js.
+
+
 ## Project setup
 ```
 npm install
