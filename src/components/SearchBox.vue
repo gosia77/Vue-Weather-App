@@ -30,3 +30,19 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+    .search-box {
+        font-display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+     .search-box input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+  }
+
+</style>

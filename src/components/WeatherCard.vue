@@ -1,7 +1,7 @@
 <template>
   <div class="weather-container">
     <div class="weather-wrap">
-      <class class="search-box">
+      <div class="search-box">
         <!-- serch for the weather -->
         <SearchBox v-model="cityName" @search="fetchWeather" />
         <!-- search for the weather info and icon -->
@@ -9,7 +9,7 @@
         <Echarts :options="temperatureChartOptions" />
         <Echarts :options="humidityChartOptions" />
         <Echarts :options="windChartOptions" />
-        </class>
+        </div>
     </div>
   </div>
 </template>
@@ -71,6 +71,7 @@ export default {
     setTemperatureChartOptions(data) {
       this.temperatureChartOptions = {
         title: { text: "Temperature (°C)", left: "center" },
+        responsive: true,
         xAxis: { type: "category", data: data.map((item) => item.name) },
         yAxis: { type: "value", name: "°C" },
         series: [
@@ -86,6 +87,7 @@ export default {
     setHumidityChartOptions(data) {
       this.humidityChartOptions = {
         title: { text: "Humidity (%)", left: "center" },
+        responsive: true,
         xAxis: { type: "category", data: data.map((item) => item.name) },
         yAxis: { type: "value", name: "%" },
         series: [
@@ -101,6 +103,7 @@ export default {
     setWindChartOptions(data) {
       this.windChartOptions = {
         title: { text: "Wind (m/s)", left: "center" },
+        responsive: true,
         xAxis: { type: "category", data: data.map((item) => item.name) },
         yAxis: { type: "value", name: "m/s" },
         series: [
@@ -116,3 +119,23 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .weather-container {
+    max-width: 640px;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .weather-wrap {
+    max-width: 600px;
+    border-radius: 15px;
+    padding: 30px;
+    width: 100%;
+    text-align: center;
+  }
+
+ 
+
+  
+</style>

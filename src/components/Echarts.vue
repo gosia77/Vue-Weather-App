@@ -39,4 +39,12 @@
     },
   };
   </script>
+
+<style scoped>
+  .echarts {
+    margin-top: 30px;
+  }
+
+
+</style>
   
