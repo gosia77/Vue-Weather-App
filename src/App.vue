@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <h1>Weather</h1>
+    <p>Enter your city and press Enter to check the weather.</p>
   <WeatherCard/>
 </div>
 </template>

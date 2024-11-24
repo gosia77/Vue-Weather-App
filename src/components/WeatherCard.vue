@@ -2,10 +2,8 @@
   <div class="weather-container">
     <div class="weather-wrap">
       <div class="search-box">
-        <!-- serch for the weather -->
         <SearchBox v-model="cityName" @search="fetchWeather" />
-        <!-- search for the weather info and icon -->
-        <WeatherInfo :weatherData="weatherData" :weather_icon="weather_icon" />
+        <WeatherList v-if="weatherData && weatherData.main" :weatherData="weatherData"/>
         <Echarts :options="temperatureChartOptions" />
         <Echarts :options="humidityChartOptions" />
         <Echarts :options="windChartOptions" />
@@ -15,48 +13,52 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { fetchWeather } from '@/api/client';
 import SearchBox from './SearchBox.vue';
-import WeatherInfo from './WeatherInfo.vue'
+import WeatherList from './WeatherList.vue';
 import Echarts from './Echarts.vue';
 
 export default {
   name: 'WeatherCard',
   components: {
     SearchBox,
-    WeatherInfo,
+    WeatherList,
     Echarts,
   },
   data() {
     return {
-      api_key: "517dc78d3ff883903d2e990d46a79c50",
-      url_base: "https://api.openweathermap.org/data/2.5/",
       weather_icon: "http://openweathermap.org/img/wn/",
-      // city entered by user
+      weatherData: null,
       cityName: "",
-      // data from API
-      weatherData: {},
-      temperatureChartOptions: null,
-      humidityChartOptions: null,
-      windChartOptions: null,
+      temperatureChartOptions: {},
+      humidityChartOptions: {},
+      windChartOptions: {},
+      errorMessage: null,
     };
   },
   methods: {
-    async fetchWeather() {
-      if (this.cityName !== "") {
-        try {
-          const response = await axios.get(`${this.url_base}weather?q=${this.cityName}&units=metric&appid=${this.api_key}`);
-          this.setResults(response.data);
-          this.weather_icon = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`;
-         this.updateChartsData(response.data);
-        } catch (error) {
-          console.error("Error fetching weather data:", error);
-        }
+    async fetchWeather(cityName) {
+      if (!cityName) {
+        this.errorMessage = "Please enter a city name";
+        return;
       }
+      this.errorMessage = null;
+        try {
+          const data = await fetchWeather(cityName);
+          if (data && data.weather) {
+          this.setResults(data);
+          this.weather_icon = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+         this.updateChartsData(data);
+        } else {
+         this.errorMessage = "No weather data found for this city.";
+        }
+        } catch (error) {
+          this.errorMessage = error.message || "Falid to fetch weather data";
+        }
     },
     setResults(returnedResponse) {
       this.weatherData = returnedResponse;
-      console.log("WeatherDat: ", returnedResponse);
+      console.log("WeatherData: ", returnedResponse);
     },
     updateChartsData(data) {
       const chartData= [
@@ -117,7 +119,7 @@ export default {
       };
     },
   }
-};
+}
 </script>
 
 <style scoped>

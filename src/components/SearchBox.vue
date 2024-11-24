@@ -11,7 +11,10 @@
 export default {
     name: "SearchBox",
     props: {
-        modelValue: String,
+        modelValue: {
+            type: String,
+            required: true,
+        }
     },
     data() {
         return{
@@ -21,7 +24,7 @@ export default {
     watch: {
         cityName(newCity) {
             this.$emit("update:modelValue", newCity);
-        }
+        },
     },
     methods: {
         onEnter() {
