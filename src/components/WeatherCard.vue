@@ -28,12 +28,12 @@ export default {
   data() {
     return {
       weather_icon: "http://openweathermap.org/img/wn/",
-      weatherData: null,
+      weatherData: {},
       cityName: "",
       temperatureChartOptions: {},
       humidityChartOptions: {},
       windChartOptions: {},
-      errorMessage: null,
+      errorMessage: {},
     };
   },
   methods: {

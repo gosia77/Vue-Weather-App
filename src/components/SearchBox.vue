@@ -2,8 +2,7 @@
 <template>
 <div class="search-box">
     <input type="text" placeholder="Search..." class="search-bar" 
-    v-model="cityName"
-    @keypress.enter="onEnter" />
+    v-model="cityName" @keypress.enter="onEnter" />
    </div> 
 </template>
 
