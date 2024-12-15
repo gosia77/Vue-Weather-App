@@ -17,6 +17,4 @@ const weatherUrl = process.env.VUE_APP_API_URL_DATA_BASE;
                 throw new Error("An unexpected error: " + error.message);
             }
         }
-    }
- 
-
+}

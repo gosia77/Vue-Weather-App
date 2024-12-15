@@ -11,7 +11,6 @@
         </ul>
     </div>
 </template>
-
 <script>
 export default {
     name: "WeatherList",
@@ -25,6 +24,7 @@ export default {
 .weather-list ul, li {
     list-style: none;
     text-decoration: none;
+    
 }
 
 </style>

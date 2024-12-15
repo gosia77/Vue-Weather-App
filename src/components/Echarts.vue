@@ -16,6 +16,7 @@
       };
     },
     mounted() {
+      // it retrieves the DOM element to which the chart will be assigned.
       const chartDom = this.$refs.chartContainer;
       this.myChart = echarts.init(chartDom); 
       if (this.options) {
@@ -48,4 +49,4 @@
 
 
 </style>
-  
+
