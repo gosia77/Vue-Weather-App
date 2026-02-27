@@ -16,7 +16,7 @@
 import { fetchWeather } from '@/api/client';
 import SearchBox from './SearchBox.vue';
 import WeatherList from './WeatherList.vue';
-import Echarts from './Echarts.vue';
+import Echarts from './WeatherEcharts.vue';
 
 export default {
   name: 'WeatherCard',

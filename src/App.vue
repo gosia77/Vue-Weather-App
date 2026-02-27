@@ -3,6 +3,7 @@
     <h1>Weather</h1>
     <p>Enter your city and press Enter to check the weather.</p>
   <WeatherCard/>
+  <WeatherEcharts/>
   <!-- <MyCounter /> -->
 </div>
 </template>
@@ -10,12 +11,15 @@
 <script>
 // import MyCounter from './components/MyCounter.vue';
 import WeatherCard from './components/WeatherCard.vue'
+import WeatherEcharts from './components/WeatherEcharts.vue'
+
 
 
 export default {
   name: 'App',
   components: {
     WeatherCard,
+    WeatherEcharts,
     // MyCounter
   },
 };

@@ -16,7 +16,6 @@
     <datalist id="cities">
         <option v-for="(city, index) in cities" :key="index" :value="city"></option>
     </datalist>
-    <p>Wpisane: {{ inputText }}</p>
   </div>
     
 </template>
@@ -50,8 +49,8 @@ const onInputChange = (event) => {
   emits("inputChange", inputText.value);
 }
 
-// Lista miast
-const cities = ['Warszawa', 'Kraków', 'Gdańsk', 'Wrocław']
+// Cities for datalist
+const cities = ['Warszawa', 'Kraków', 'Gdańsk', 'Wrocław', "Pisarzowa", "Limanowa", "Nowy Sącz", "Zakopane", "Szczecin", "Lublin"];
 
 </script>
 
