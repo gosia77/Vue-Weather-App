@@ -44,6 +44,7 @@ const onSearch = (event) => {
     refSearch.value.focus();
   }
 }
+
 const onInputChange = (event) => {
   inputText.value = event.target.value
   emits("inputChange", inputText.value);
