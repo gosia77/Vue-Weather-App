@@ -3,6 +3,7 @@
     <div class="weather-wrap">
       <div class="search-box">
       <InputComponent @events="handleInputEvent"/>
+      <!-- <CurrentWeather /> -->
         <EchartComponent :options="chartOptions" />
       </div>
     </div>
@@ -19,7 +20,8 @@ const weatherData = ref(mockData)
 console.log(weatherData.value)
 
 const EchartComponent = defineAsyncComponent(() => import('./EchartComponent.vue'));
-const InputComponent = defineAsyncComponent(() => import('./InputComponent.vue'))
+const InputComponent = defineAsyncComponent(() => import('./InputComponent.vue'));
+// const CurrentWeather = defineAsyncComponent(() => import('./CurrentWeather.vue'));
 
 const chartOptions = computed(() => ({
    xAxis: {
