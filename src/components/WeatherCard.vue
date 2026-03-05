@@ -2,8 +2,11 @@
   <div class="weather-container">
     <div class="weather-wrap">
       <div class="search-box">
+      <div class="city-name">
+        <h2>{{ selectedCity.name }}</h2>
+      </div>
       <InputComponent @events="handleInputEvent"/>
-      <!-- <CurrentWeather /> -->
+      <CurrentWeather @events="handleInputEvent" />
         <EchartComponent :options="chartOptions" />
       </div>
     </div>
@@ -13,15 +16,18 @@
 <script setup>
 
 import { defineAsyncComponent, computed, ref } from 'vue';
-import { mockData } from '@/api/mockData';
+import { getCurrentWeather } from '../api/client.js';
+// import { mockData } from '@/api/mockData.js';
 
-const weatherData = ref(mockData)
+const weatherData = ref(null);
+// const cityList = ref([]);
+const selectedCity = ref('');
 
 console.log(weatherData.value)
 
 const EchartComponent = defineAsyncComponent(() => import('./EchartComponent.vue'));
 const InputComponent = defineAsyncComponent(() => import('./InputComponent.vue'));
-// const CurrentWeather = defineAsyncComponent(() => import('./CurrentWeather.vue'));
+const CurrentWeather = defineAsyncComponent(() => import('./CurrentWeather.vue'));
 
 const chartOptions = computed(() => ({
    xAxis: {
@@ -41,9 +47,18 @@ const chartOptions = computed(() => ({
   ]
 }));
 
-const handleInputEvent = (payload) => {
-  console.log('input event:', payload.name, payload.value)
+const handleInputEvent = async (selectedCity) => {
+  console.log('input event:', selectedCity.name, selectedCity.value);
+  const lat = 50.0647;
+  const lon = 19.9450;
+
+  const data = await getCurrentWeather(lat, lon);
+  if (data) {
+    weatherData.value = data;
+    console.log("Nowe dane pogody:", weatherData.value);
+  }
 }
+
 
 </script>
 
