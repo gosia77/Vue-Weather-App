@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-const apiKey = '67df65255ba2010d7626b016f882ccf2'
+const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY
 // const geoWeatherUrl = import.meta.env.VITE_OPEN_WEATHER_GEO_URL
 // const fourDayWeather = import.meta.env.VITE_OPEN_WEATHER_FOUR_DAY_URL
 
