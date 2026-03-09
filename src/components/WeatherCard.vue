@@ -2,51 +2,68 @@
   <div class="weather_container">
     <div class="weather-wrap">
       <div class="search-box">
-        <div class="city-name">
-          <h2>{{ selectedCity.name }}</h2>
+
+        <!-- current date and city -->
+        <div class="current_date">
+          <h2>{{ inputEntered }}</h2>
+          <p>{{ currentDate }}</p>
         </div>
-        <InputComponent @events="handleInputEvent" />
+
+        <!-- InputComponent -->
+        <InputComponent 
+        :cities="cities"
+          :inputValue="inputEntered"
+          :placeholder="'Enter city...'"
+          @events="handleInputEvent"  
+        />
+
+        <!-- Current Weather -->
         <div class="current_weather">
-          <h2 class="today_date"></h2>
+          <h2 class="today_date">{{ inputEntered }}</h2> 
           <div class="openweather_icon">
-
             <div class="flex_col">
-
+              <!-- weather icon -->
             </div>
           </div>
           <div class="weather_details">
-            <div class="flex_row">
-
+            <div v-if="weatherData" class="flex_row">
               <p>Humidity</p>
-            </div>
-            <div class="flex_row">
-
-
+              <span>{{ weatherData?.main?.humidity ?? '-' }}%</span> 
+              <p>Pressure</p>
+              <span>{{ weatherData?.main?.pressure ?? '-' }} hPa</span> 
+              <p>Temperature</p>
+              <span>{{ weatherData?.main?.temp ? kelvinToRoundedCelcius(weatherData.main.temp) : '-' }}°C</span> 
             </div>
           </div>
         </div>
-        <CurrentWeather @events="handleInputEvent" />
+
+        <!-- Current Weather Componentys -->
+        
         <EchartComponent :options="chartOptions" />
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-
-import { defineAsyncComponent, computed, ref } from 'vue';
+import { defineAsyncComponent, ref, computed } from 'vue';
 import { getCurrentWeather } from '../api/client.js';
-// import { mockData } from '@/api/mockData.js';
+
+const inputEntered = ref('');
+
 
 const weatherData = ref(null);
-// const cityList = ref([]);
-const selectedCity = ref('');
 
-console.log(weatherData.value)
+
+const currentDate = ref(new Date().toLocaleString());
+
+const cities = ref([]);
+
 
 const EchartComponent = defineAsyncComponent(() => import('./EchartComponent.vue'));
 const InputComponent = defineAsyncComponent(() => import('./InputComponent.vue'));
-const CurrentWeather = defineAsyncComponent(() => import('./CurrentWeather.vue'));
+
 
 const chartOptions = computed(() => ({
   xAxis: {
@@ -66,8 +83,14 @@ const chartOptions = computed(() => ({
   ]
 }));
 
+
 const handleInputEvent = async (selectedCity) => {
   console.log('input event:', selectedCity.name, selectedCity.value);
+
+ 
+  inputEntered.value = selectedCity.value;
+
+  
   const lat = 50.0647;
   const lon = 19.9450;
 
@@ -76,21 +99,28 @@ const handleInputEvent = async (selectedCity) => {
     weatherData.value = data;
     console.log("Nowe dane pogody:", weatherData.value);
   }
-}
+};
 
+/**
+ * 
+ */
+const kelvinToRoundedCelcius = (kelvin) => Math.round(kelvin - 273.15)
 
 </script>
 
 <style scoped>
+.current_date {
+  font-size: 14px;
+  padding: 2px;
+
+}
 .weather_container {
   padding: 20px;
 }
-
 .today_date {
   font-size: 14px;
   padding: 2px;
 }
-
 .openweather_icon {
   display: flex;
   justify-content: center;
@@ -98,7 +128,6 @@ const handleInputEvent = async (selectedCity) => {
   margin-top: 5px;
   padding: 5px;
 }
-
 .weather_details {
   display: flex;
   justify-content: space-between;
@@ -108,22 +137,14 @@ const handleInputEvent = async (selectedCity) => {
   margin-top: 5px;
   margin-bottom: 16px;
 }
-
-.weather_details img {
-  max-width: 2rem;
-  filter: invert(100%);
-}
-
 .flex_col {
   flex-direction: column;
 }
-
 .flex_row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
 .temp_degree {
   font-size: 2rem;
 }
