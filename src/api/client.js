@@ -1,16 +1,16 @@
 import axios from 'axios'
 
 
-const apiKey = VITE_OPEN_WEATHER_API_KEY
-const geoWeatherUrl = import.meta.env.VITE_OPEN_WEATHER_GEO_URL
+const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY
+const geoWeatherUrl = 'http://api.openweathermap.org/geo/1.0/direct'
 // const fourDayWeather = import.meta.env.VITE_OPEN_WEATHER_FOUR_DAY_URL
 
 /**TO DO */
-export async function getCurrentWeather(latitude, longitude) {
-    if (!latitude || !longitude || !apiKey) {
-        throw new Error('Missing required parameters or API key')
+export async function getCurrentWeather(lat, lon) {
+    if (typeof lat !== "number" || typeof lon !== "number" || !apiKey) {
+        throw new Error('Invalid coordinates or API key')
     } try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`)
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
         console.log('yyyyyyy',response.data);
             return response.data
             
@@ -47,3 +47,4 @@ export async function fetchCityList(cityName) {
     }
   }
 }
+
