@@ -1,106 +1,78 @@
 <template>
-    <div class="inputContainer">
-        <input :type="type" list="cities" v-model="internalValue" @input="onInput" :placeholder="placeholder" @keydown.enter="onSearch">
-        <datalist id="cities">
-            <option v-for="(city, index) in cities" :key="index" :value="city"></option>
-        </datalist>
-        <p>{{ props.label }}</p>
-        <font-awesome-icon icon="search" class="img" @click="onSearch" aria-label="search"
-            :style="{ fontSize: '15px', cursor: 'pointer' }" />
-    </div>
+  <div class="search_box">
+    <input 
+      type="text" 
+      placeholder="Search..." 
+      ref="refSearch" 
+      v-model="inputText"
+      @keydown.enter="onSearch"
+      @input="onInputChange"
+      list="cities"
+    />
+    <font-awesome-icon 
+      icon="search"
+      @click="onSearch"
+      aria-label="search"
+      :style="{ fontSize: '24px', cursor: 'pointer' }"
+    />
+    <datalist id="cities">
+      <option 
+        v-for="(city, index) in citiesProp" 
+        :key="index" 
+        :value="city.name || city"
+      ></option>
+    </datalist>
+  </div>
 </template>
 
 <script setup>
+import { ref, defineProps, defineEmits, watch } from 'vue'
 
-import { defineProps, defineEmits, watch, ref } from 'vue'
+const refSearch = ref(null)
+const inputText = ref('')
 
-
-
-/** */
-const emit = defineEmits({
-
-    events: (event) => event,
-});
-
-/** @type {props} */
+// props od nadrzędnego komponentu
 const props = defineProps({
-    type: {
-        type: String,
-        required: false,
-        default: "text",
-    },
-    inputValue: {
-        type: [String, Number],
-        required: false,
-        default: "",
-    },
-    placeholder: {
-        type: String,
-        required: false,
-        default: "",
-    },
-    label: {
-        type: String,
-        required: false,
-        default: "",
-    },
-    isAutoFocus: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-
-    uErrorMessage: {
-        type: String,
-        required: false,
-        default: "",
-    },
-    name: {
-        type: String,
-        required: false,
-        default: "input",
-    },
-
+  cities: {
+    type: Array,
+    default: () => []
+  },
+  inputValue: {
+    type: String,
+    default: ''
+  }
 })
 
-const internalValue = ref(props.inputValue)
+const emits = defineEmits(["inputChange", "search"])
 
+// Watch inputValue z nadrzędnego komponentu
 watch(() => props.inputValue, val => {
-  internalValue.value = val
-});
+  inputText.value = val
+})
 
-const onInput = () => {
-        emit("events", {
-            name: props.name,
-            value: internalValue.value
-        })
-    
-};
-
-const onSearch = () => {
-    emit("events", {
-        name: props.name,
-        value: internalValue.value
-    });
+// Emit inputChange przy wpisywaniu
+const onInputChange = (event) => {
+  inputText.value = event.target.value
+  emits("inputChange", inputText.value)
 }
 
-// Cities for datalist
-const cities = ['Warszawa', 'Kraków', 'Gdańsk', 'Wrocław', "Pisarzowa", "Limanowa", "Nowy Sącz", "Zakopane", "Szczecin", "Lublin"];
+// Emit search przy Enter lub kliknięciu lupki
+const onSearch = (event) => {
+  if (!event || event.key === 'Enter' || event.type === 'click') {
+    emits("search", inputText.value)
+    inputText.value = ''
+    refSearch.value.focus()
+  }
+}
 
+// Używamy props, a nie lokalnego ref
+const citiesProp = props.cities
 </script>
 
 <style scoped>
-.inputContainer {
-    display: flex;
-    align-items: center;
-}
-
-.inputContainer input {
-    border: none;
-    border-bottom: 2px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease;
-    margin-bottom: 0;
-    padding: 5px 0;
+.search_box {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
 }
 </style>

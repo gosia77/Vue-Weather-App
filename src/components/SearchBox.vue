@@ -34,6 +34,11 @@ defineProps({
     required: false,
     default: () => [],
   },
+  cities: {
+    type: Array,
+    required: false,
+    default: () => []
+  },
 });
 
 const onSearch = (event) => {
@@ -51,7 +56,7 @@ const onInputChange = (event) => {
 }
 
 // Cities for datalist
-const cities = ['Warszawa', 'Kraków', 'Gdańsk', 'Wrocław', "Pisarzowa", "Limanowa", "Nowy Sącz", "Zakopane", "Szczecin", "Lublin"];
+const cities = ref([]);
 
 </script>
 

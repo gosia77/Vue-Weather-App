@@ -9,8 +9,12 @@
                 </div>
 
                 <!-- InputComponent -->
-                <InputComponent :cities="cities" :inputValue="inputEntered" :placeholder="'Enter city...'" @events="handleInputEvent" />
-
+<InputComponent
+  :cities="cities"
+  :inputValue="inputEntered"
+  @inputChange="handleInputChange"
+  @search="handleCitySearch"
+/>
                 <!-- Current Weather -->
                 <div class="current_weather">
                     <h2 class="today_date">{{ inputEntered }}</h2>
