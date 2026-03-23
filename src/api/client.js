@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 const apiKey = '67df65255ba2010d7626b016f882ccf2'
-const geoWeatherUrl = 'http://api.openweathermap.org/geo/1.0/direct'
+const geoWeatherUrl = 'https://api.openweathermap.org/geo/1.0/direct'
 // const fourDayWeather = import.meta.env.VITE_OPEN_WEATHER_FOUR_DAY_URL
 
 /**TO DO */
@@ -31,15 +31,17 @@ export async function getCurrentWeather(lat, lon) {
  */
 
 export async function fetchCityList(cityName) {
+  if (!cityName) return []
   try {
     const response = await axios.get(`${geoWeatherUrl}`, {
       params: {
         q: cityName,
-        limit: 3,
+        limit: 5,
         units: 'metric',
         appid: apiKey,
       },
     })
+    console.log("city list:",response.data)
     return response.data
   } catch (error) {
     if (error.response) {

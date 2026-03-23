@@ -17,8 +17,8 @@
     />
     <datalist id="cities">
       <option 
-        v-for="(city, index) in citiesProp" 
-        :key="index" 
+        v-for="(city, index) in props.cities" 
+        :key="city.id || index" 
         :value="city.name || city"
       ></option>
     </datalist>
@@ -31,7 +31,7 @@ import { ref, defineProps, defineEmits, watch } from 'vue'
 const refSearch = ref(null)
 const inputText = ref('')
 
-// props od nadrzędnego komponentu
+// props from parent component
 const props = defineProps({
   cities: {
     type: Array,
@@ -45,18 +45,18 @@ const props = defineProps({
 
 const emits = defineEmits(["inputChange", "search"])
 
-// Watch inputValue z nadrzędnego komponentu
+// Watch inputValue from parent component and update inputText accordingly
 watch(() => props.inputValue, val => {
   inputText.value = val
 })
 
-// Emit inputChange przy wpisywaniu
+// Emit inputChange with the current input value
 const onInputChange = (event) => {
   inputText.value = event.target.value
   emits("inputChange", inputText.value)
 }
 
-// Emit search przy Enter lub kliknięciu lupki
+// Emit search by enter or click yhe search icon
 const onSearch = (event) => {
   if (!event || event.key === 'Enter' || event.type === 'click') {
     emits("search", inputText.value)
@@ -65,8 +65,7 @@ const onSearch = (event) => {
   }
 }
 
-// Używamy props, a nie lokalnego ref
-const citiesProp = props.cities
+
 </script>
 
 <style scoped>

@@ -2,22 +2,14 @@
     <div class="weather_container">
         <div class="weather-wrap">
             <div class="search-box">
-                <!-- current date and city -->
-                <div class="current_date">
-                    <h2>{{ inputEntered }}</h2>
-                    <p>{{ currentDate }}</p>
-                </div>
-
                 <!-- InputComponent -->
-<InputComponent
-  :cities="cities"
-  :inputValue="inputEntered"
-  @inputChange="handleInputChange"
-  @search="handleCitySearch"
-/>
+                <InputComponent :cities="cities" :inputValue="inputEntered" @inputChange="handleInputEvent" @search="handleInputEvent" />
                 <!-- Current Weather -->
                 <div class="current_weather">
                     <h2 class="today_date">{{ inputEntered }}</h2>
+                    <div class="current_date">
+                        <p>{{ currentDate }}</p>
+                    </div>
                     <div class="openweather_icon">
                         <div class="flex_col">
                             <!-- weather icon -->
@@ -87,10 +79,10 @@ const chartOptions = computed(() => ({
  * Currently, it uses hardcoded latitude and longitude values for Krakow, but it can be modified to use the actual coordinates of the selected city in the future.
  */
 const handleInputEvent = async (selectedCity) => {
-    inputEntered.value = selectedCity.value;
+    inputEntered.value = selectedCity;
 
     try {
-        const cityList = await fetchCityList(selectedCity.value);
+        const cityList = await fetchCityList(selectedCity);
 
         if (!cityList.length) {
             console.log("City not found");
@@ -102,6 +94,7 @@ const handleInputEvent = async (selectedCity) => {
         const data = await getCurrentWeather(lat, lon);
 
         weatherData.value = data;
+        console.log("Current weather data:", data);
     } catch (error) {
         console.error("Error:", error);
     }
