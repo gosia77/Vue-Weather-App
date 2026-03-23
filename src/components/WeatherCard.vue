@@ -4,30 +4,43 @@
             <div class="search-box">
                 <!-- InputComponent -->
                 <InputComponent :cities="cities" :inputValue="inputEntered" @inputChange="handleInputEvent" @search="handleInputEvent" />
+                <h2 v-if="inputEntered">{{ inputEntered }}</h2>
                 <!-- Current Weather -->
-                <div class="current_weather">
-                    <h2 class="today_date">{{ inputEntered }}</h2>
+                <div class="current_weather" v-if="weatherData">
                     <div class="current_date">
                         <p>{{ currentDate }}</p>
                     </div>
+                    <!-- openweather icon -->
                     <div class="openweather_icon">
-                        <div class="flex_col">
-                            <!-- weather icon -->
-                        </div>
+                        <img :src="`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`" :alt="weatherData.weather[0].description" />
+                        <p>{{ weatherData.weather[0].description }}</p>
                     </div>
-                    <div class="weather_details">
-                        <div v-if="weatherData" class="flex_row">
-                            <p>Humidity</p>
-                            <span>{{ weatherData?.main?.humidity ?? "-" }}%</span>
-                            <p>Pressure</p>
-                            <span>{{ weatherData?.main?.pressure ?? "-" }} hPa</span>
-                            <p>Temperature</p>
-                            <span>{{ weatherData?.main?.temp ? kelvinToRoundedCelcius(weatherData.main.temp) : "-" }}°C</span>
+                    <div class="weather_details flex_row">
+                        <div>
+                            <p>Temperature:</p>
+                            <span>{{ kelvinToRoundedCelcius(weatherData.main.temp) }}°C</span>
+                        </div>
+                        <div>
+                            <p>Feels like:</p>
+                            <span>{{ kelvinToRoundedCelcius(weatherData.main.feels_like) }}°C</span>
+                        </div>
+                        <div>
+                            <p>Humidity:</p>
+                            <span>{{ weatherData.main.humidity }}%</span>
+                        </div>
+                        <div>
+                            <p>Pressure:</p>
+                            <span>{{ weatherData.main.pressure }} hPa</span>
+                        </div>
+                        <div>
+                            <p>Wind:</p>
+                            <span>{{ weatherData.wind.speed }} m/s</span>
                         </div>
                     </div>
                 </div>
 
-                <EchartComponent :options="chartOptions" />
+                <EchartComponent v-if="chartData.labels.length && chartData.temps.length" :options="chartOptions" />
+                <WeatherTable v-if="weatherTableData.length" :tabulatorData="weatherTableData" :columns="tableColumns" />
             </div>
         </div>
     </div>
@@ -35,19 +48,33 @@
 
 <script setup>
 import { defineAsyncComponent, ref, computed } from "vue";
-import { getCurrentWeather, fetchCityList } from "../api/client.js";
+import { getCurrentWeather, fetchCityList, getForecastWeather } from "../api/client.js";
 
 const EchartComponent = defineAsyncComponent(() => import("./EchartComponent.vue"));
 const InputComponent = defineAsyncComponent(() => import("./InputComponent.vue"));
+const WeatherTable = defineAsyncComponent(() => import("./TableComponent.vue"));
 
-/** @type {string} */
+/** @type {import('vue').Ref<string>} */
 const inputEntered = ref("");
-/**@type {import('../api/client.js').WeatherData | null} */
+/**@type {import('vue').Ref<object>} */
 const weatherData = ref(null);
-/**@type  {string} */
+/**@type {import('vue').Ref<string>} */
 const currentDate = ref(new Date().toLocaleString());
-/**@type {string[]} */
+/**@type {import('vue').Ref<string[]>} */
 const cities = ref([]);
+/** @type {import('vue').Ref<object>} */
+const chartData = ref({
+    labels: [],
+    temps: [],
+});
+/** @type {import('vue').Ref<object[]>} */
+const weatherTableData = ref([]);
+/** @type {import('vue').Ref<object[]>} */
+const tableColumns = ref([
+    { title: "Temp °C", field: "temp" },
+    { title: "Humidity %", field: "humidity" },
+    { title: "Wind m/s", field: "wind" },
+]);
 
 /**
  * @param {string} cityName
@@ -58,14 +85,14 @@ const chartOptions = computed(() => ({
     xAxis: {
         type: "category",
         boundaryGap: false,
-        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        data: chartData.value.labels,
     },
     yAxis: {
         type: "value",
     },
     series: [
         {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: chartData.value.temps,
             type: "line",
             areaStyle: {},
         },
@@ -79,27 +106,43 @@ const chartOptions = computed(() => ({
  * Currently, it uses hardcoded latitude and longitude values for Krakow, but it can be modified to use the actual coordinates of the selected city in the future.
  */
 const handleInputEvent = async (selectedCity) => {
-    inputEntered.value = selectedCity;
+    if (!selectedCity) return;
+
+    const cityName = typeof selectedCity === "string" ? selectedCity : selectedCity.name;
 
     try {
-        const cityList = await fetchCityList(selectedCity);
+        const cityList = await fetchCityList(cityName);
 
         if (!cityList.length) {
-            console.log("City not found");
+            console.error("City not found");
+            weatherData.value = null;
+            inputEntered.value = "";
             return;
         }
 
-        const { lat, lon } = cityList[0];
-
-        const data = await getCurrentWeather(lat, lon);
-
+        const city = cityList[0];
+        inputEntered.value = `${city.name}${city.state ? ", " + city.state : ""}, ${city.country}`;
+        const data = await getCurrentWeather(city.lat, city.lon);
         weatherData.value = data;
-        console.log("Current weather data:", data);
+
+        //chart data weaather
+        const forecast = await getForecastWeather(city.lat, city.lon);
+        chartData.value.labels = forecast.list.map((item) => item.dt_txt.slice(11, 16));
+        chartData.value.temps = forecast.list.map((item) => Math.round(item.main.temp));
+
+        //table data weather
+        weatherTableData.value = forecast.list.map((i) => ({
+            day: i.dt_txt,
+            temp: Math.round(i.main.temp),
+            humidity: i.main.humidity,
+            wind: i.wind.speed,
+        }));
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching weather:", error.message);
+        weatherData.value = null;
+        inputEntered.value = "";
     }
 };
-
 /**
  * function to convert kelvin to celcius and round it to the nearest integer
  */
