@@ -13,11 +13,11 @@ const MapComponent = defineAsyncComponent(() => import("./MapComponent.vue"));
 
 import { computed, ref, defineAsyncComponent } from "vue";
 const tabs = [
-    { name: "WeatherCard", label: "Weather Card", component: WeatherCard },
     { name: "MapComponent", label: "Map Component", component: MapComponent },
+    { name: "WeatherCard", label: "Weather Card", component: WeatherCard },
 ];
 
-const activeTab = ref("WeatherCard");
+const activeTab = ref("MapComponent");
 const activeTabComponent = computed(() => {
     return tabs.find((tab) => tab.name === activeTab.value)?.component;
 });

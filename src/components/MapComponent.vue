@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h2>Map Component</h2>
         <div id="map" class="map"></div>
     </div>
 </template>
@@ -18,7 +17,7 @@ const weatherCache = new Map();
 
 onMounted(() => {
     //create map
-    map = L.map("map").setView([52.2297, 21.0122], 6); // Warszawa jako start
+    map = L.map("map").setView([52.2297, 21.0122], 6);
 
     // touch map tiles
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -46,7 +45,7 @@ onMounted(() => {
             } catch (err) {
                 console.error(err);
             }
-        }, 400); // debounce 400ms
+        }, 300); // debounce 300ms
     });
 });
 
