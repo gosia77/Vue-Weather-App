@@ -2,6 +2,7 @@
     <div class="weather_container">
         <div class="weather-wrap">
             <div class="search-box">
+                <p>Enter your city</p>
                 <!-- InputComponent -->
                 <InputComponent :cities="cities" :inputValue="inputEntered" @inputChange="handleInputEvent" @search="handleInputEvent" />
                 <h2 v-if="inputEntered">{{ inputEntered }}</h2>
@@ -71,6 +72,7 @@ const chartData = ref({
 const weatherTableData = ref([]);
 /** @type {import('vue').Ref<object[]>} */
 const tableColumns = ref([
+    { title: "Date", field: "day" },
     { title: "Temp °C", field: "temp" },
     { title: "Humidity %", field: "humidity" },
     { title: "Wind m/s", field: "wind" },

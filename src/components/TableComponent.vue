@@ -30,7 +30,7 @@ onMounted(() => {
         data: props.tabulatorData,
         reactiveData: true,
         layout: "fitColumns",
-        columns: [{ title: "Example", field: "example2" }, ...props.columns],
+        columns: [{ title: "", field: "" }, ...props.columns],
     });
     return { tabulator, table };
 });

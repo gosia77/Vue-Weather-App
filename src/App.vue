@@ -1,8 +1,8 @@
 <template>
   <div class="app">
     <h1>Weather</h1>
-    <p>Enter your city and press Enter to check the weather.</p>
-  <WeatherCard/>
+    <TabPanel/>
+  <!-- <WeatherCard/> -->
   
   <!-- <MyCounter /> -->
 </div>
@@ -11,14 +11,16 @@
 <script>
 // import MyCounter from './components/MyCounter.vue';
 import { defineAsyncComponent } from 'vue';
-const WeatherCard = defineAsyncComponent(() => import('./components/WeatherCard.vue'))
+// const WeatherCard = defineAsyncComponent(() => import('./components/WeatherCard.vue'))
+const TabPanel = defineAsyncComponent(() => import('./components/TabPanel.vue'))
 
 
 
 export default {
   name: 'App',
   components: {
-    WeatherCard,
+    TabPanel,
+    // WeatherCard,
 
     // MyCounter
   },
