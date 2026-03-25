@@ -12,12 +12,16 @@ const WeatherCard = defineAsyncComponent(() => import("./WeatherCard.vue"));
 const MapComponent = defineAsyncComponent(() => import("./MapComponent.vue"));
 
 import { computed, ref, defineAsyncComponent } from "vue";
+
 const tabs = [
     { name: "MapComponent", label: "Map Component", component: MapComponent },
     { name: "WeatherCard", label: "Weather Card", component: WeatherCard },
 ];
 
+/** @type {import('vue').Ref<string>} */
 const activeTab = ref("MapComponent");
+
+/** @type {import('vue').ComputedRef<import('vue').Component>} */
 const activeTabComponent = computed(() => {
     return tabs.find((tab) => tab.name === activeTab.value)?.component;
 });
@@ -49,7 +53,7 @@ const activeTabComponent = computed(() => {
 
 .tab_panel button:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(134, 167, 202, 0.5);
+    box-shadow: 0 0 0 2px rgba(109, 227, 231, 0.5);
 }
 
 .tab_panel button.active {
@@ -68,6 +72,6 @@ const activeTabComponent = computed(() => {
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid #0056b3;
+    border-top: 5px solid #6be6fc;
 }
 </style>

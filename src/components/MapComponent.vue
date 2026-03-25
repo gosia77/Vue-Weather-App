@@ -49,6 +49,7 @@ onMounted(() => {
     });
 });
 
+/** Function to show popup with weather information */
 function showPopup(data, lat, lng) {
     const city = data.name || "Unknown";
     const temp = Math.round(data.main.temp);
@@ -62,7 +63,7 @@ function showPopup(data, lat, lng) {
 .map {
     height: 500px;
     width: 500px;
-    border-radius: 12px;
+    border-radius: 6px;
     margin-top: 10px;
 }
 </style>
