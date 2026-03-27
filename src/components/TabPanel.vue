@@ -48,7 +48,7 @@ const activeTabComponent = computed(() => {
 }
 
 .tab_panel button:hover {
-    background-color: hsla(194, 52%, 51%, 0.486);
+    background-color: hsla(194, 85%, 65%, 0.486);
 }
 
 .tab_panel button:focus {
@@ -57,7 +57,7 @@ const activeTabComponent = computed(() => {
 }
 
 .tab_panel button.active {
-    background-color: #3ea7d8;
+    background-color: #78e6f5;
 }
 
 .tab_panel button.active:hover {
